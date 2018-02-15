@@ -9,8 +9,8 @@ data <- read.table(f, header=TRUE, sep=",")
 processed_data <- scale(data)
 
 # Check
-colMeans(scaled.data)
+colMeans(processed_data)
 
-# Standardisierung
+# Standardisierung nicht notwendig, da Daten nicht normalverteilt
 
 write.table(processed_data, stdout(), sep = ",", eol = "\n", row.names = FALSE)

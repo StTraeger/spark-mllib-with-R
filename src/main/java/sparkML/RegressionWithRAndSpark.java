@@ -27,10 +27,10 @@ public class RegressionWithRAndSpark {
 		String preprocessingScriptName = "DataPreprocessing.R";
 		
 		// Add R file to SparkContext to be available from all nodes
-		//sparkContext.addFile(rScriptPreprocessing);
+		sparkContext.addFile(rScriptPreprocessing);
 		sparkContext.addFile(rScriptRegression);
 
-		JavaRDD<String> inputData = javaSparkContext.textFile(data)/*.pipe(SparkFiles.get(preprocessingScriptName))*/;
+		JavaRDD<String> inputData = javaSparkContext.textFile(data).pipe(SparkFiles.get(preprocessingScriptName));
 		System.out.println(inputData.collect());
 
 		JavaRDD<String> processedData = inputData.pipe(SparkFiles.get(regressionScriptName));
