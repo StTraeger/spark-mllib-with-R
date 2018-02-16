@@ -1,4 +1,4 @@
-#!/usr/bin/RScript
+#!/usr/bin/Rscript
 
 f <- file("stdin")
 open(f)
@@ -6,11 +6,6 @@ open(f)
 data <- read.table(f, header=TRUE, sep=",")
 
 # Normalisierung
-processed_data <- scale(data)
-
-# Check
-colMeans(processed_data)
-
-# Standardisierung nicht notwendig, da Daten nicht normalverteilt
+processed_data = scale(data)
 
 write.table(processed_data, stdout(), sep = ",", eol = "\n", row.names = FALSE)
