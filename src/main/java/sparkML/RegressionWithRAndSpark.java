@@ -4,7 +4,6 @@ import org.apache.spark.SparkContext;
 import org.apache.spark.SparkFiles;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.SparkSession;
 
 public class RegressionWithRAndSpark {
@@ -14,7 +13,6 @@ public class RegressionWithRAndSpark {
 				.getOrCreate();
 		SparkContext sparkContext = session.sparkContext();
 		sparkContext.setLogLevel("ERROR");
-		SQLContext sqlContext = session.sqlContext();
 
 		JavaSparkContext javaSparkContext = new JavaSparkContext(sparkContext);
 
@@ -28,11 +26,13 @@ public class RegressionWithRAndSpark {
 		sparkContext.addFile(rScriptPreprocessing);
 		sparkContext.addFile(rScriptRegression);
 
-		JavaRDD<String> processedData = javaSparkContext.textFile(data).pipe(SparkFiles.get(preprocessingScriptName));
+		JavaRDD<String> inputData = Dataloader.readCsvAsStringRDD(javaSparkContext, data);
+
+		JavaRDD<String> processedData = inputData.pipe(SparkFiles.get(preprocessingScriptName));
 		System.out.println(processedData.collect());
 
-		JavaRDD<String> inputData = processedData.pipe(SparkFiles.get(regressionScriptName));
-		System.out.println(inputData.collect());
+		JavaRDD<String> finalData = processedData.pipe(SparkFiles.get(regressionScriptName));
+		System.out.println(finalData.collect());
 
 	}
 
