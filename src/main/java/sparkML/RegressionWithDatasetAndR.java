@@ -1,6 +1,8 @@
 package sparkML;
 
 import org.apache.spark.SparkContext;
+import org.apache.spark.SparkFiles;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
@@ -21,8 +23,13 @@ public class RegressionWithDatasetAndR {
 		String regressionScriptName = "PopulationRegressionMUC.R";
 		String preprocessingScriptName = "DataPreprocessing.R";
 
+		sparkContext.addFile(rScriptPreprocessing);
+		sparkContext.addFile(rScriptRegression);
+
 		Dataset<Row> inputData = Dataloader.readCsvAsRowDataset(sqlContext, data);
 		inputData.show();
+		JavaRDD<String> inputDataRDD = inputData.javaRDD().pipe(SparkFiles.get(preprocessingScriptName));
+		System.out.println(inputDataRDD.collect());
 
 	}
 
