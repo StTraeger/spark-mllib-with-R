@@ -31,7 +31,7 @@ public class RegressionWithJavaRDDAndR {
 		// JavaRDD<String> inputData = Dataloader.readCsvAsStringRDD(javaSparkContext,
 		// data);
 		JavaRDD<PopulationEntry> inputData = Dataloader.readCsvAsPopulationEntryRDD(javaSparkContext, data);
-		inputData.collect();
+		System.out.println(inputData.collect());
 
 		JavaRDD<String> processedData = inputData.pipe(SparkFiles.get(preprocessingScriptName));
 		System.out.println(processedData.collect());
