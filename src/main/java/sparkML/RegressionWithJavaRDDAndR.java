@@ -6,6 +6,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 
+import models.PopulationEntry;
+
 public class RegressionWithJavaRDDAndR {
 
 	public static void main(String[] args) {
@@ -26,7 +28,10 @@ public class RegressionWithJavaRDDAndR {
 		sparkContext.addFile(rScriptPreprocessing);
 		sparkContext.addFile(rScriptRegression);
 
-		JavaRDD<String> inputData = Dataloader.readCsvAsStringRDD(javaSparkContext, data);
+		// JavaRDD<String> inputData = Dataloader.readCsvAsStringRDD(javaSparkContext,
+		// data);
+		JavaRDD<PopulationEntry> inputData = Dataloader.readCsvAsPopulationEntryRDD(javaSparkContext, data);
+		inputData.collect();
 
 		JavaRDD<String> processedData = inputData.pipe(SparkFiles.get(preprocessingScriptName));
 		System.out.println(processedData.collect());
